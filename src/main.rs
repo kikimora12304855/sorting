@@ -3,6 +3,7 @@ use std::path::Path;
 use toml::Value;
 
 
+
 fn create_dir(name_dir: &str) -> std::io::Result<()> { 
 
     let dir_list = fs::read_dir("..")?; 
@@ -21,6 +22,7 @@ fn create_dir(name_dir: &str) -> std::io::Result<()> {
     Ok(())
 }
 
+
 fn file_transfer(name_file: &str, name_dir: &str) -> std::io::Result<()> {
     let _str = format!("../{name_file}");
     let name_file_pach = Path::new(&_str);
@@ -36,6 +38,7 @@ fn file_transfer(name_file: &str, name_dir: &str) -> std::io::Result<()> {
 
     Ok(())
 }
+
 
 fn conf_read_toml(path_file: &Path) -> std::io::Result<Value>{
     let conf = std::fs::read_to_string(path_file)?; 
