@@ -1,8 +1,6 @@
-use std::fs;
+use std::fs::{self, ReadDir};
 use std::path::Path;
 use toml::Value;
-
-
 
 
 fn create_dir(name_dir: &str) -> std::io::Result<()> { 
@@ -47,16 +45,10 @@ fn conf_read_toml(path_file: &Path) -> std::io::Result<Value>{
     Ok(toml)
 }
     
-
-fn main() {    
-    let config = Path::new("./config.toml"); 
-    let config_path = conf_read_toml(config).expect("\nERROR \nThere is no configuration file\n\n");
-    let list_dir = fs::read_dir("..").unwrap();
-
-
-    for file in list_dir {
+fn sord(list_dir: ReadDir, config_path: Value) -> std::io::Result<()> {
+   for file in list_dir {
         let keys = config_path.as_table().unwrap().keys().cloned();
-        let _str = format!("../{}", &file.unwrap().file_name().to_str().unwrap());
+        let _str = format!("../{}", &file?.file_name().to_str().unwrap());
         let file_path = Path::new(&_str);
 
         for key in keys {
@@ -71,13 +63,24 @@ fn main() {
                                 if file_exc.to_str().unwrap() == exc.as_str().expect("102") {
                                     let file = file_path.file_name().unwrap().to_str().unwrap();
 
-                                    create_dir(&key).unwrap();
-                                    file_transfer(&file, &key).unwrap();
+                                    create_dir(&key)?;
+                                    file_transfer(&file, &key)?;
                             }    
                         } 
                     }    
                 }                
             }
         }
-    }
+    } 
+   Ok(())
+}
+
+fn main() {    
+    let config = Path::new("./config.toml"); 
+    let config_path = conf_read_toml(config).expect("\nERROR \nThere is no configuration file\n\n");
+    let list_dir = fs::read_dir("..").unwrap();
+
+    sord(list_dir, config_path).unwrap();
+
+    
 }

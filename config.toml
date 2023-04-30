@@ -1,0 +1,20 @@
+
+Music = ['mp3', 'wav', 'flac', 'aac', 'ogg', 'm4a', 'alac', 'wma', 'aiff', 'opus', 'dsd', 'ac3', 'mid']
+
+Photo = ['jpg', 'jpeg', 'png', 'bmp', 'tiff', 'tif', 'svg', 'webp', 'heif', 'heic', 'raw', 'ico', 'hdr', 'psd', 'ai', 'eps', 'xcf', 'sketch']
+
+Video = ['gif', 'mp4', 'avi', 'mkv', 'mov', 'wmv', 'flv', 'webm', 'mpeg', 'mpg', '3gp', 'asf', 'rm', 'swf', 'vob', 'amv', 'ogv']
+
+App = ['exe', 'dmg', 'apk', 'ipa', 'deb', 'msi', 'rpm', 'bin', 'app']
+
+Table = ['xlsx', 'xls', 'ods', 'gsheet', 'numbers', 'csv', 'tsv',  'dbf']
+
+Word = ['docx', 'doc', 'odt', 'rtf', 'txt']
+
+PDF = ['pdf', 'pptx', 'ppt', 'odp', 'pps', 'ppsx', 'ppsm', 'pptm', 'potx', 'potm', 'otp']
+
+Other = ['markdown', 'html']
+
+Archiv = ['zip', 'rar', '7z', 'tar', 'gz', 'bz2', 'xz', 'iso']
+
+
