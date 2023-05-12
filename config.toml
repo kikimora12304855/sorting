@@ -13,8 +13,6 @@ Word = ['docx', 'doc', 'odt', 'rtf', 'txt']
 
 PDF = ['pdf', 'pptx', 'ppt', 'odp', 'pps', 'ppsx', 'ppsm', 'pptm', 'potx', 'potm', 'otp']
 
-Other = ['markdown', 'html']
-
 Archiv = ['zip', 'rar', '7z', 'tar', 'gz', 'bz2', 'xz', 'iso']
 
-
+Other = ['markdown', 'html']
