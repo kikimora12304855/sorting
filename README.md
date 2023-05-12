@@ -23,6 +23,7 @@ it will add its number to it in parentheses
 
 ![sample](video/sample.gif)
 
+
 <h4 id="config">Config</h4>
 
 You can configure it in the **config.toml** file 
