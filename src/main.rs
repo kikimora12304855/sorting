@@ -10,7 +10,8 @@ fn create_dir(name_dir: &str) -> std::io::Result<()> {
 
     for file_or_dir in dir_list { 
         let file_or_dir_str: String = file_or_dir?.file_name().to_string_lossy().to_string();
-        let file_or_dir_str_metadata = fs::metadata(format!("../{}", &file_or_dir_str))?;
+        let file_or_dir_str_path = format!("../{}", &file_or_dir_str);
+        let file_or_dir_str_metadata = fs::metadata(Path::new(&file_or_dir_str_path))?;
 
         if file_or_dir_str_metadata.is_dir() && file_or_dir_str == name_dir  {
             return Ok(());     
