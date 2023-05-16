@@ -44,27 +44,7 @@ cd <path to where you want to go>/<your platform>/
 and go to the directory where the file sorter is, unzip it, delete the zip file,
 and go to the sorter directory.
 
-```bash
-cd <path to where you want to go>
-
-unzip <your platform>.zip 
-
-rm -rf <your platform>.zip
-
-cd <your platform>\
-```
-
-2. Run the file sorter using the command:
-
-```bash
-.\sorter
-```
-
-3. but for future use:
-
-```bash
-cd <path to where you want to go>\<your platform>\
-```
+2. Run the file sorter
 
 **❗ In this version, it must be run in the directory where the ❗**
 
