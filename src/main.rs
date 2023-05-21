@@ -1,7 +1,12 @@
+extern crate notify;
 use std::fs::{self, ReadDir};
 use std::path::Path;
 use toml::Value;
-use std::error;
+use std::{error, eprintln};
+
+use std::sync::mpsc::channel;
+use std::time::Duration;
+use notify::{RecommendedWatcher, RecursiveMode, Watcher, Config, EventKind, event};
 
 
 
@@ -35,8 +40,6 @@ fn file_transfer(name_file: &str, name_dir: &str) -> std::io::Result<()> {
     let (file, exc) = name_file.split_once(".").unwrap();
     let strg = format!("../{}/{}(1).{}", &name_dir, file, exc);
     let path_dir_file_rex = Path::new(&strg);
-
-
     
     if name_file_pach.exists() && !dir_and_file_pach.exists(){
         fs::copy(&name_file_pach, &dir_and_file_pach)?;
@@ -65,7 +68,6 @@ fn file_transfer(name_file: &str, name_dir: &str) -> std::io::Result<()> {
         fs::remove_file(&name_file_pach)?;
         return Ok(()); 
     }
-
     Ok(())
 }
 
@@ -77,9 +79,10 @@ fn conf_read_toml(path_file: &Path) -> Result<Value, Box<dyn error::Error>>{
 }
     
 fn sord(list_dir: ReadDir, config_path: Value) -> std::io::Result<()> {
-   for file in list_dir {
+    
+    for file in list_dir {
         let keys = config_path.as_table().unwrap().keys().cloned();
-        let _str = format!("../{}", &file?.file_name().to_str().unwrap());
+        let _str: String = format!("../{}", &file.unwrap().file_name().to_str().unwrap());
         let file_path = Path::new(&_str);
 
         for key in keys {
@@ -91,11 +94,11 @@ fn sord(list_dir: ReadDir, config_path: Value) -> std::io::Result<()> {
 
                         if file_path.metadata().unwrap().is_file() {
 
-                                if file_exc.to_str().unwrap() == exc.as_str().unwrap() {
-                                    let file = file_path.file_name().unwrap().to_str().unwrap();
+                            if file_exc.to_str().unwrap() == exc.as_str().unwrap() {
+                                let file = file_path.file_name().unwrap().to_str().unwrap();
 
-                                    create_dir(&key)?;
-                                    file_transfer(&file, &key)?;
+                                create_dir(&key)?;
+                                file_transfer(&file, &key)?;
                             }    
                         } 
                     }    
@@ -108,14 +111,46 @@ fn sord(list_dir: ReadDir, config_path: Value) -> std::io::Result<()> {
 
 fn main() {    
     let config = Path::new("config.toml"); 
-    let config_path = conf_read_toml(config).unwrap_or_else(|err| {
-        eprintln!("Failed to read file contents: {}", err);
+    let config_path = conf_read_toml(config).unwrap_or_else(|_err| {
+        eprintln!("no configuration file");
         std::process::exit(1);
     });
-    
-    let list_dir = fs::read_dir("..").unwrap();
+   
+    let dir = Path::new("..");
 
-    sord(list_dir, config_path).unwrap();
+    let (tx, rx) = channel();
 
-    
+    let config = Config::default()
+    .with_poll_interval(Duration::from_secs(10))
+    .with_compare_contents(false);
+
+    let mut watcher: RecommendedWatcher = Watcher::new(tx, config).unwrap();
+
+    watcher.watch(&dir, RecursiveMode::NonRecursive).unwrap();
+
+    loop {
+        match rx.recv() {
+            Ok(Ok(o)) => {  
+                match o.kind {
+                    EventKind::Create(event::CreateKind::File) => {
+                        sord(fs::read_dir(&dir).unwrap(), config_path.clone()).unwrap()
+                    },
+                    
+                    EventKind::Modify(event::ModifyKind::Data(event::DataChange::Content)) => {
+                        sord(fs::read_dir(&dir).unwrap(), config_path.clone()).unwrap()
+                    },
+                    
+                    EventKind::Modify(event::ModifyKind::Metadata(event::MetadataKind::Any)) => {
+                         sord(fs::read_dir(&dir).unwrap(), config_path.clone()).unwrap()
+                    },
+                    
+                    _ => (),
+                    } 
+            }, 
+            
+            Ok(Err(_)) => (),
+            
+            Err(_) => (),
+        }
+    }
 }
