@@ -29,13 +29,15 @@ cd <your platform>/
 2. Run the file sorter using the command:
 
 ```bash
-./sorter
+./sorter &
 ```
 
 3. but for future use:
 
 ```bash
 cd <path to where you want to go>/<your platform>/
+
+./sorter &
 ```
 
 ##### For Windows
@@ -71,7 +73,7 @@ be moved to the "extensions" directory.
 
 <h4 id="new">New</h4>
 
-Windows support added
+add background mode to work when something is changed in the directory
 
 <h4 id="plan">Plan</h4>
 
@@ -80,7 +82,7 @@ Windows support added
 
 - [x] 1.2.0 - add crossplatform for Winduos
 
-- [ ] 1.3.0 - add background mode to work when something is changed in the directory
+- [x] 1.3.0 - add background mode to work when something is changed in the directory
 
 - [ ] 1.4.0 - add it to be able to sort files where it's needed and it doesn't
         matter where it is

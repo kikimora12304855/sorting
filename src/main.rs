@@ -8,6 +8,7 @@ use std::sync::mpsc::channel;
 use std::time::Duration;
 use notify::{RecommendedWatcher, RecursiveMode, Watcher, Config, EventKind, event};
 
+
 fn divide(file_path: &Path) -> Result<(String, String), Box<dyn std::error::Error>> {
     let file_stem = file_path.file_stem().unwrap().to_str().unwrap(); 
     let file_stem = Path::new(file_stem).file_stem().unwrap().to_str().unwrap();
@@ -15,7 +16,6 @@ fn divide(file_path: &Path) -> Result<(String, String), Box<dyn std::error::Erro
 
     Ok((file_stem.to_string(), extension))
 }
-    
 
 
 fn create_dir(name_dir: &str) -> std::io::Result<()> { 
@@ -85,7 +85,8 @@ fn conf_read_toml(path_file: &Path) -> Result<Value, Box<dyn error::Error>>{
     let toml: Value = toml::from_str(&conf)?;
     Ok(toml)
 }
-    
+
+
 fn sord(list_dir: ReadDir, config_path: Value) -> std::io::Result<()> {
     
     for file in list_dir {
