@@ -8,6 +8,14 @@ use std::sync::mpsc::channel;
 use std::time::Duration;
 use notify::{RecommendedWatcher, RecursiveMode, Watcher, Config, EventKind, event};
 
+fn divide(file_path: &Path) -> Result<(String, String), Box<dyn std::error::Error>> {
+    let file_stem = file_path.file_stem().unwrap().to_str().unwrap(); 
+    let file_stem = Path::new(file_stem).file_stem().unwrap().to_str().unwrap();
+    let extension = file_path.to_str().unwrap().replace(file_stem, "");
+
+    Ok((file_stem.to_string(), extension))
+}
+    
 
 
 fn create_dir(name_dir: &str) -> std::io::Result<()> { 
@@ -37,7 +45,7 @@ fn file_transfer(name_file: &str, name_dir: &str) -> std::io::Result<()> {
     let _str = format!("../{}/{}", name_dir, name_file);
     let dir_and_file_pach = Path::new(&_str);
 
-    let (file, exc) = name_file.split_once(".").unwrap();
+    let (file, exc) = divide(Path::new(name_file)).unwrap();
     let strg = format!("../{}/{}(1).{}", &name_dir, file, exc);
     let path_dir_file_rex = Path::new(&strg);
     
@@ -52,7 +60,7 @@ fn file_transfer(name_file: &str, name_dir: &str) -> std::io::Result<()> {
         return Ok(());
 
     } else if name_file_pach.exists() && dir_and_file_pach.exists() && path_dir_file_rex.exists() {
-        let (file_name, exc) = &name_file.split_once(".").unwrap();
+        let (file_name, exc) = divide(Path::new(name_file)).unwrap();
         let mut file_name_index: u16 = 1;
 
         let new_file = loop {
